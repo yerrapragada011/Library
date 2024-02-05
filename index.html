@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Exercise</title>
+  </head>
+  <body>
+    <div id="books"></div>
+    <button id="addBook">Submit</button>
+    <script>
+      const myLibrary = ['book1', 'book2', 'book3']
+
+      const books = document.getElementById('books')
+      function displayLibrary() {
+        for (let i = 0; i < myLibrary.length; i++) {
+          books.innerHTML = myLibrary.map((i) => `<li>${i}</li>`).join('')
+        }
+      }
+      displayLibrary()
+
+      const addBook = document.getElementById('addBook')
+      addBook.addEventListener('click', function () {
+        event.preventDefault()
+        function Book(title, author, pages, read) {
+          this.title = title
+          this.author = author
+          this.pages = pages
+          this.read = read
+          this.info = function () {
+            return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}.`
+          }
+        }
+        let title = prompt('Enter book tile: ')
+        let author = prompt('Enter book author: ')
+        let pages = +prompt('Enter book pages: ')
+        let read = prompt('Have you read it?')
+        const newBook = new Book(title, author, pages, read)
+        myLibrary.push(JSON.stringify(newBook.info()))
+        displayLibrary()
+      })
+    </script>
+  </body>
+</html>
