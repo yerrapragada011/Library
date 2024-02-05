@@ -7,11 +7,20 @@
   </head>
   <body>
     <div id="books"></div>
-    <button id="addBook">Submit</button>
+    <button id="addBook">Add book</button>
     <script>
       const myLibrary = ['book1', 'book2', 'book3']
 
       const books = document.getElementById('books')
+      function Book(title, author, pages, read) {
+        this.title = title
+        this.author = author
+        this.pages = pages
+        this.read = read
+        this.info = function () {
+          return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}.`
+        }
+      }
       function displayLibrary() {
         for (let i = 0; i < myLibrary.length; i++) {
           books.innerHTML = myLibrary.map((i) => `<li>${i}</li>`).join('')
@@ -22,15 +31,6 @@
       const addBook = document.getElementById('addBook')
       addBook.addEventListener('click', function () {
         event.preventDefault()
-        function Book(title, author, pages, read) {
-          this.title = title
-          this.author = author
-          this.pages = pages
-          this.read = read
-          this.info = function () {
-            return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}.`
-          }
-        }
         let title = prompt('Enter book tile: ')
         let author = prompt('Enter book author: ')
         let pages = +prompt('Enter book pages: ')
