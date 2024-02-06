@@ -4,6 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Library Exercise</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        padding: 10px;
+      }
+      #books {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .list {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      #addBook {
+        width: 25%;
+      }
+    </style>
   </head>
   <body>
     <div id="books"></div>
@@ -12,6 +33,7 @@
       const myLibrary = ['book1', 'book2', 'book3']
 
       const books = document.getElementById('books')
+
       function Book(title, author, pages, read) {
         this.title = title
         this.author = author
@@ -21,16 +43,31 @@
           return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}.`
         }
       }
+
       function displayLibrary() {
-        for (let i = 0; i < myLibrary.length; i++) {
-          books.innerHTML = myLibrary.map((i) => `<li>${i}</li>`).join('')
-        }
+        books.innerHTML = ''
+        myLibrary.forEach((book, index) => {
+          let bookElement = document.createElement('li')
+          bookElement.classList.add('list')
+          bookElement.textContent = book
+          let deleteButton = document.createElement('button')
+          deleteButton.textContent = 'delete'
+          deleteButton.addEventListener('click', () => {
+            deleteBook(index)
+          })
+          bookElement.appendChild(deleteButton)
+          books.appendChild(bookElement)
+        })
       }
       displayLibrary()
 
+      function deleteBook(index) {
+        myLibrary.splice(index, 1)
+        displayLibrary()
+      }
+
       const addBook = document.getElementById('addBook')
-      addBook.addEventListener('click', function () {
-        event.preventDefault()
+      addBook.addEventListener('click', () => {
         let title = prompt('Enter book tile: ')
         let author = prompt('Enter book author: ')
         let pages = +prompt('Enter book pages: ')
