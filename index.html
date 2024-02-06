@@ -24,23 +24,66 @@
       #addBook {
         width: 25%;
       }
+      .dialog-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+      .dialog-box {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
     </style>
   </head>
   <body>
     <div id="books"></div>
     <button id="addBook">Add book</button>
+    <div class="dialog-container" id="dialogContainer">
+      <div class="dialog-box">
+        <p>Have you read this book?</p>
+        <span id="yesRadio_span">
+          <input type="radio" id="yesRadio" name="readStatus" value="yes" />
+          <label for="yesRadio">Yes</label>
+        </span>
+        <span id="noRadio_span">
+          <input type="radio" id="noRadio" name="readStatus" value="no" />
+          <label for="noRadio">No</label>
+        </span>
+        <button id="confirmButton">Confirm</button>
+      </div>
+    </div>
     <script>
       const myLibrary = ['book1', 'book2', 'book3']
 
       const books = document.getElementById('books')
 
-      function Book(title, author, pages, read) {
+      function Book(title, author, pages, read = false) {
         this.title = title
         this.author = author
         this.pages = pages
         this.read = read
         this.info = function () {
-          return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}.`
+          return `${this.title} by ${this.author}, ${this.pages} pages, ${
+            this.read ? 'read' : 'not read'
+          }.`
+        }
+      }
+
+      Book.prototype.readBook = function () {
+        let message = `Have you read "${this.title}"?`
+        let answer = confirm(message)
+        if (answer) {
+          this.read = true
+        } else {
+          this.read = false
         }
       }
 
@@ -55,7 +98,15 @@
           deleteButton.addEventListener('click', () => {
             deleteBook(index)
           })
+          let readToggle = document.createElement('input')
+          readToggle.setAttribute('type', 'checkbox')
+          readToggle.checked = book.read
+          readToggle.addEventListener('change', (event) => {
+            readBook(index)
+            book.read = event.target.checked
+          })
           bookElement.appendChild(deleteButton)
+          bookElement.appendChild(readToggle)
           books.appendChild(bookElement)
         })
       }
@@ -66,15 +117,29 @@
         displayLibrary()
       }
 
+      function readBook(index) {
+        myLibrary[index].readBook()
+        displayLibrary()
+      }
+
       const addBook = document.getElementById('addBook')
+      const dialogContainer = document.getElementById('dialogContainer')
+      const confirmButton = document.getElementById('confirmButton')
+
       addBook.addEventListener('click', () => {
         let title = prompt('Enter book tile: ')
         let author = prompt('Enter book author: ')
         let pages = +prompt('Enter book pages: ')
-        let read = prompt('Have you read it?')
-        const newBook = new Book(title, author, pages, read)
-        myLibrary.push(JSON.stringify(newBook.info()))
-        displayLibrary()
+        dialogContainer.style.display = 'flex'
+        confirmButton.onclick = function () {
+          let readStatus = document.querySelector(
+            'input[name="readStatus"]:checked'
+          ).value
+          const newBook = new Book(title, author, pages, readStatus === 'yes')
+          myLibrary.push(JSON.stringify(newBook.info()))
+          displayLibrary()
+          dialogContainer.style.display = 'none'
+        }
       })
     </script>
   </body>
