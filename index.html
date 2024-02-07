@@ -49,19 +49,15 @@
     <div class="dialog-container" id="dialogContainer">
       <div class="dialog-box">
         <p>Have you read this book?</p>
-        <span id="yesRadio_span">
-          <input type="radio" id="yesRadio" name="readStatus" value="yes" />
-          <label for="yesRadio">Yes</label>
-        </span>
-        <span id="noRadio_span">
-          <input type="radio" id="noRadio" name="readStatus" value="no" />
-          <label for="noRadio">No</label>
-        </span>
+        <input type="radio" id="yesRadio" name="readStatus" value="yes" />
+        <label for="yesRadio">Yes</label>
+        <input type="radio" id="noRadio" name="readStatus" value="no" />
+        <label for="noRadio">No</label>
         <button id="confirmButton">Confirm</button>
       </div>
     </div>
     <script>
-      const myLibrary = ['book1', 'book2', 'book3']
+      const myLibrary = []
 
       const books = document.getElementById('books')
 
@@ -92,7 +88,7 @@
         myLibrary.forEach((book, index) => {
           let bookElement = document.createElement('li')
           bookElement.classList.add('list')
-          bookElement.textContent = book
+          bookElement.textContent = book.info()
           let deleteButton = document.createElement('button')
           deleteButton.textContent = 'delete'
           deleteButton.addEventListener('click', () => {
@@ -100,6 +96,7 @@
           })
           let readToggle = document.createElement('input')
           readToggle.setAttribute('type', 'checkbox')
+          readToggle.setAttribute('id', `book${index}`)
           readToggle.checked = book.read
           readToggle.addEventListener('change', (event) => {
             readBook(index)
@@ -136,7 +133,7 @@
             'input[name="readStatus"]:checked'
           ).value
           const newBook = new Book(title, author, pages, readStatus === 'yes')
-          myLibrary.push(JSON.stringify(newBook.info()))
+          myLibrary.push(newBook)
           displayLibrary()
           dialogContainer.style.display = 'none'
         }
