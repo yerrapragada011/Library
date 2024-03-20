@@ -11,6 +11,13 @@
         gap: 25px;
         padding: 10px;
       }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      .form-section {
+        margin: 5px 0px;
+      }
       #books {
         display: flex;
         flex-direction: column;
@@ -28,163 +35,187 @@
   </head>
   <body>
     <div id="books"></div>
-    <button id="addBook">Add book</button>
+    <form id="bookForm">
+      <div class="form-section">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" />
+      </div>
+      <div class="form-section">
+        <label for="author">Author:</label>
+        <input type="text" id="author" name="author" />
+      </div>
+      <div class="form-section">
+        <label for="pages">Pages:</label>
+        <input type="number" id="pages" name="pages" min="0" />
+      </div>
+      <div class="form-section">
+        <label for="read">Read:</label>
+        <input type="checkbox" id="read" name="read" />
+      </div>
+      <div class="form-section">
+        <br />
+        <input type="submit" value="Submit" />
+      </div>
+    </form>
     <script>
-      // const myLibrary = []
+      const myLibrary = []
 
-      // const books = document.getElementById('books')
+      const books = document.getElementById('books')
+      const bookForm = document.getElementById('bookForm')
 
-      // function Book(title, author, pages, read = false) {
-      //   this.title = title
-      //   this.author = author
-      //   this.pages = pages
-      //   this.read = read
-      //   this.info = function () {
-      //     return `${this.title} by ${this.author}, ${this.pages} pages, ${
-      //       this.read ? 'read' : 'not read'
-      //     }.`
-      //   }
-      // }
-
-      // Book.prototype.readBook = function () {
-      //   let message = `Have you read "${this.title}"?`
-      //   let answer = confirm(message)
-      //   if (answer) {
-      //     this.read = true
-      //   } else {
-      //     this.read = false
-      //   }
-      // }
-
-      // function displayLibrary() {
-      //   books.innerHTML = ''
-      //   myLibrary.forEach((book, index) => {
-      //     let bookElement = document.createElement('li')
-      //     bookElement.classList.add('list')
-      //     bookElement.textContent = book.info()
-      //     let deleteButton = document.createElement('button')
-      //     deleteButton.textContent = 'delete'
-      //     deleteButton.addEventListener('click', () => {
-      //       deleteBook(index)
-      //     })
-      //     let readToggle = document.createElement('input')
-      //     readToggle.setAttribute('type', 'checkbox')
-      //     readToggle.setAttribute('id', `book${index}`)
-      //     readToggle.checked = book.read
-      //     readToggle.addEventListener('change', () => {
-      //       readBook(index)
-      //     })
-      //     bookElement.appendChild(deleteButton)
-      //     bookElement.appendChild(readToggle)
-      //     books.appendChild(bookElement)
-      //   })
-      // }
-      // displayLibrary()
-
-      // function deleteBook(index) {
-      //   myLibrary.splice(index, 1)
-      //   displayLibrary()
-      // }
-
-      // function readBook(index) {
-      //   myLibrary[index].readBook()
-      //   displayLibrary()
-      // }
-
-      // const addBook = document.getElementById('addBook')
-
-      // addBook.addEventListener('click', () => {
-      //   let title = prompt('Enter book title: ')
-      //   let author = prompt('Enter book author: ')
-      //   let pages = +prompt('Enter book pages: ')
-      //   const newBook = new Book(title, author, pages)
-      //   myLibrary.push(newBook)
-      //   readBook(myLibrary.length - 1)
-      // })
-
-      class Book {
-        constructor(title, author, pages, read = false) {
-          this.title = title
-          this.author = author
-          this.pages = pages
-          this.read = read
-        }
-
-        info() {
+      function Book(title, author, pages, read = false) {
+        this.title = title
+        this.author = author
+        this.pages = pages
+        this.read = read
+        this.info = function () {
           return `${this.title} by ${this.author}, ${this.pages} pages, ${
             this.read ? 'read' : 'not read'
           }.`
         }
+      }
 
-        readBook() {
-          let message = `Have you read "${this.title}"?`
-          let answer = confirm(message)
-          if (answer) {
-            this.read = true
-          } else {
-            this.read = false
-          }
+      Book.prototype.readBook = function () {
+        let message = `Have you read "${this.title}"?`
+        let answer = confirm(message)
+        if (answer) {
+          this.read = true
+        } else {
+          this.read = false
         }
       }
 
-      class Library {
-        constructor() {
-          this.books = []
-          this.booksContainer = document.getElementById('books')
-          this.addBookButton = document.getElementById('addBook')
-          this.addBookButton.addEventListener('click', this.addBook)
-          this.displayLibrary()
-        }
-
-        displayLibrary() {
-          this.booksContainer.innerHTML = ''
-          this.books.forEach((book, index) => {
-            let bookElement = document.createElement('li')
-            bookElement.classList.add('list')
-            bookElement.textContent = book.info()
-
-            let deleteButton = document.createElement('button')
-            deleteButton.textContent = 'delete'
-            deleteButton.addEventListener('click', () => {
-              this.deleteBook(index)
-            })
-
-            let readToggle = document.createElement('input')
-            readToggle.setAttribute('type', 'checkbox')
-            readToggle.setAttribute('id', `book${index}`)
-            readToggle.checked = book.read
-            readToggle.addEventListener('change', () => {
-              this.readBook(index)
-            })
-
-            bookElement.appendChild(deleteButton)
-            bookElement.appendChild(readToggle)
-            this.booksContainer.appendChild(bookElement)
+      function displayLibrary() {
+        books.innerHTML = ''
+        myLibrary.forEach((book, index) => {
+          let bookElement = document.createElement('li')
+          bookElement.classList.add('list')
+          bookElement.textContent = book.info()
+          let deleteButton = document.createElement('button')
+          deleteButton.textContent = 'delete'
+          deleteButton.addEventListener('click', () => {
+            deleteBook(index)
           })
-        }
+          let readToggle = document.createElement('input')
+          readToggle.setAttribute('type', 'checkbox')
+          readToggle.setAttribute('id', `book${index}`)
+          readToggle.checked = book.read
+          readToggle.addEventListener('change', () => {
+            readBook(index)
+          })
+          bookElement.appendChild(deleteButton)
+          bookElement.appendChild(readToggle)
+          books.appendChild(bookElement)
+        })
+      }
+      displayLibrary()
 
-        addBook = () => {
-          let title = prompt('Enter book title: ')
-          let author = prompt('Enter book author: ')
-          let pages = +prompt('Enter book pages: ')
-          const newBook = new Book(title, author, pages)
-          this.books.push(newBook)
-          newBook.readBook()
-          this.displayLibrary()
-        }
-
-        deleteBook = (index) => {
-          this.books.splice(index, 1)
-          this.displayLibrary()
-        }
-
-        readBook = (index) => {
-          this.books[index].readBook()
-          this.displayLibrary()
-        }
+      function deleteBook(index) {
+        myLibrary.splice(index, 1)
+        displayLibrary()
       }
 
-      const myLibrary = new Library()
+      function readBook(index) {
+        myLibrary[index].readBook()
+        displayLibrary()
+      }
+
+      bookForm.addEventListener('submit', (e) => {
+        e.preventDefault()
+        const formData = new FormData(bookForm)
+        const title = formData.get('title')
+        const author = formData.get('author')
+        const pages = parseInt(formData.get('pages'))
+        const read = formData.get('read') === 'on'
+        const newBook = new Book(title, author, pages, read)
+        myLibrary.push(newBook)
+        displayLibrary()
+        bookForm.reset()
+      })
+
+      // class Book {
+      //   constructor(title, author, pages, read = false) {
+      //     this.title = title
+      //     this.author = author
+      //     this.pages = pages
+      //     this.read = read
+      //   }
+
+      //   info() {
+      //     return `${this.title} by ${this.author}, ${this.pages} pages, ${
+      //       this.read ? 'read' : 'not read'
+      //     }.`
+      //   }
+
+      //   readBook() {
+      //     let message = `Have you read "${this.title}"?`
+      //     let answer = confirm(message)
+      //     if (answer) {
+      //       this.read = true
+      //     } else {
+      //       this.read = false
+      //     }
+      //   }
+      // }
+
+      // class Library {
+      //   constructor() {
+      //     this.books = []
+      //     this.booksContainer = document.getElementById('books')
+      //     this.addBookButton = document.getElementById('addBook')
+      //     this.addBookButton.addEventListener('click', this.addBook)
+      //     this.displayLibrary()
+      //   }
+
+      //   displayLibrary() {
+      //     this.booksContainer.innerHTML = ''
+      //     this.books.forEach((book, index) => {
+      //       let bookElement = document.createElement('li')
+      //       bookElement.classList.add('list')
+      //       bookElement.textContent = book.info()
+
+      //       let deleteButton = document.createElement('button')
+      //       deleteButton.textContent = 'delete'
+      //       deleteButton.addEventListener('click', () => {
+      //         this.deleteBook(index)
+      //       })
+
+      //       let readToggle = document.createElement('input')
+      //       readToggle.setAttribute('type', 'checkbox')
+      //       readToggle.setAttribute('id', `book${index}`)
+      //       readToggle.checked = book.read
+      //       readToggle.addEventListener('change', () => {
+      //         this.readBook(index)
+      //       })
+
+      //       bookElement.appendChild(deleteButton)
+      //       bookElement.appendChild(readToggle)
+      //       this.booksContainer.appendChild(bookElement)
+      //     })
+      //   }
+
+      //   addBook = () => {
+      //     let title = prompt('Enter book title: ')
+      //     let author = prompt('Enter book author: ')
+      //     let pages = +prompt('Enter book pages: ')
+      //     const newBook = new Book(title, author, pages)
+      //     this.books.push(newBook)
+      //     newBook.readBook()
+      //     this.displayLibrary()
+      //   }
+
+      //   deleteBook = (index) => {
+      //     this.books.splice(index, 1)
+      //     this.displayLibrary()
+      //   }
+
+      //   readBook = (index) => {
+      //     this.books[index].readBook()
+      //     this.displayLibrary()
+      //   }
+      // }
+
+      // const myLibrary = new Library()
     </script>
   </body>
 </html>
