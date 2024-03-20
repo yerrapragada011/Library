@@ -122,11 +122,10 @@
 
       bookForm.addEventListener('submit', (e) => {
         e.preventDefault()
-        const formData = new FormData(bookForm)
-        const title = formData.get('title')
-        const author = formData.get('author')
-        const pages = parseInt(formData.get('pages'))
-        const read = formData.get('read') === 'on'
+        const title = document.getElementById('title').value
+        const author = document.getElementById('author').value
+        const pages = parseInt(document.getElementById('pages').value)
+        const read = document.getElementById('read').checked
         const newBook = new Book(title, author, pages, read)
         myLibrary.push(newBook)
         displayLibrary()
